@@ -8,7 +8,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:lab_9/main.dart';
 import 'package:lab_9/registration_screen.dart';
 
 void main() {

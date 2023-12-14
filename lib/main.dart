@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lab_9/main_screen.dart';
 import 'registration_screen.dart';
 
 void main() {
@@ -11,4 +12,3 @@ void main() {
     ),
   ));
 }
-

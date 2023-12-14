@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:lab_9/main_screen.dart';
 import 'db_helper.dart';
-
 
 class RegistrationScreen extends StatefulWidget {
   const RegistrationScreen({super.key});
@@ -17,7 +17,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   final _emailController = TextEditingController();
   final _addressController = TextEditingController();
 
-
+  List json_list = [];
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +33,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 size: 100, // Change this to your preferred size
               ),
             ),
-            const SizedBox(height: 50,),
+            const SizedBox(
+              height: 50,
+            ),
             TextFormField(
               controller: _usernameController,
               decoration: InputDecoration(
@@ -49,7 +51,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 return null;
               },
             ),
-            const SizedBox(height: 20,),
+            const SizedBox(
+              height: 20,
+            ),
             TextFormField(
               controller: _passwordController,
               decoration: InputDecoration(
@@ -66,7 +70,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 return null;
               },
             ),
-            const SizedBox(height: 20,),
+            const SizedBox(
+              height: 20,
+            ),
             TextFormField(
               controller: _phoneController,
               decoration: InputDecoration(
@@ -75,14 +81,16 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     borderRadius: BorderRadius.circular(10), // Rounded borders
                   ),
                   labelText: 'Phone'),
-              validator: (String? value) {
+               validator: (String? value) {
                 if (value == null || value.isEmpty) {
                   return 'Please enter your email';
                 }
                 return null;
               },
             ),
-            const SizedBox(height: 20,),
+            const SizedBox(
+              height: 20,
+            ),
             TextFormField(
               controller: _emailController,
               decoration: InputDecoration(
@@ -91,14 +99,16 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     borderRadius: BorderRadius.circular(10), // Rounded borders
                   ),
                   labelText: 'Email'),
-              validator: (String? value) {
+             validator: (String? value) {
                 if (value == null || value.isEmpty) {
                   return 'Please enter your email';
                 }
                 return null;
               },
             ),
-            const SizedBox(height: 20,),
+            const SizedBox(
+              height: 20,
+            ),
             TextFormField(
               controller: _addressController,
               decoration: InputDecoration(
@@ -114,13 +124,15 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 return null;
               },
             ),
-            const SizedBox(height: 50,),
+            const SizedBox(
+              height: 50,
+            ),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
-                    // Create a User object from the input data
+                 
                     User user = User(
                       null,
                       _usernameController.text,
@@ -130,19 +142,29 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       _addressController.text,
                     );
 
-                    // Save the user data to the database
+                  
                     DBHelper dbHelper = DBHelper();
                     await dbHelper.saveUser(user);
 
-                    // Show a success message
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('User data saved')));
-                    await dbHelper.test_read('user.db');
+                    
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('User data saved')));
+                    json_list = await dbHelper.test_read('user.db');
+                    User user1 = User.fromJson(json_list[0]);
+
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => CredentialsScreen(
+                                userEmail: user1.username,
+                                userAddress: user1.address,
+                                userPhone: user1.phone,
+                                userName: user1.password)));
                   }
                 },
                 child: const Text('Submit'),
               ),
             ),
-
           ],
         ),
       ),

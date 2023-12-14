@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart' as pth;
 import 'dart:async';
@@ -21,7 +22,8 @@ class DBHelper {
   }
 
   _onCreate(Database db, int version) async {
-    await db.execute('CREATE TABLE user (id INTEGER PRIMARY KEY, username TEXT, password TEXT, phone TEXT, email TEXT, address TEXT)');
+    await db.execute(
+        'CREATE TABLE user (id INTEGER PRIMARY KEY, username TEXT, password TEXT, phone TEXT, email TEXT, address TEXT)');
   }
 
   Future<int> saveUser(User user) async {
@@ -30,7 +32,7 @@ class DBHelper {
   }
 
   //test read
-  Future<void> test_read(String db_name) async {
+  Future<List<Map>> test_read(String db_name) async {
     // Get a location using getDatabasesPath
     var databasesPath = await getDatabasesPath();
     String path = pth.join(databasesPath, db_name);
@@ -41,8 +43,8 @@ class DBHelper {
     // Get the records for the table named user which we should have created above
     List<Map> list = await database.rawQuery('SELECT * FROM user');
     print(list);
+    return list;
   }
-
 }
 
 class User {
@@ -53,7 +55,8 @@ class User {
   String email;
   String address;
 
-  User(this.id, this.username, this.password, this.phone, this.email, this.address);
+  User(this.id, this.username, this.password, this.phone, this.email,
+      this.address);
 
   Map<String, dynamic> toMap() {
     var map = <String, dynamic>{
@@ -65,5 +68,15 @@ class User {
       'address': address
     };
     return map;
+  }
+
+  factory User.fromJson(Map<String, dynamic> json) {
+    return User(
+        json["id"] as int,
+        json["username"] as String,
+        json["password"] as String,
+        json["phone"] as String,
+        json["email"] as String,
+        json["address"] as String);
   }
 }
